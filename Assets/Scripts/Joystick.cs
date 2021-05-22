@@ -19,7 +19,7 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Rabotaet");
+        //Debug.Log("Rabotaet");
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -38,7 +38,7 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
         origin = transform.position;
 
-        Debug.Log(origin);
+        //Debug.Log(origin);
     }
 
     // Update is called once per frame
@@ -74,6 +74,6 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
             transform.position = origin;
             offset = Vector3.zero;
         }
-        Debug.Log(offset);
+        //Debug.Log(offset);
     }
 }

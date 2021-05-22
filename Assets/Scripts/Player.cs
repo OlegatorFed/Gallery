@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public Joystick joystick;
     public Joystick cameraJoystick;
 
-    float moveSpeed = 0.5f;
+    float moveSpeed = 0.08f;
     float gravity = -13.0f;
 
     float velocityY = 0.0f;
@@ -36,11 +36,11 @@ public class Player : MonoBehaviour
     {
         if (cameraJoystick.statusDown)
         {
-            transform.Rotate(Vector3.up, cameraJoystick.offset.x * 0.01f);
+            transform.Rotate(Vector3.up, cameraJoystick.offset.x * 0.005f);
 
 
 
-            cameraPitch -= cameraJoystick.offset.y * 0.01f;
+            cameraPitch -= cameraJoystick.offset.y * 0.005f;
 
             cameraPitch = Mathf.Clamp(cameraPitch, -90.0f, 90.0f);
 
