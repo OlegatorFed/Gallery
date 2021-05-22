@@ -37,6 +37,8 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     void Awake()
     {
         origin = transform.position;
+
+        Debug.Log(origin);
     }
 
     // Update is called once per frame
@@ -59,13 +61,17 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
                 pointerPos = Input.mousePosition;
                 pointerVec = pointerPos - origin;
                 transform.position = pointerPos;
-                transform.localPosition = Vector3.ClampMagnitude(transform.localPosition, 100);
+
+                Vector2 offset = transform.position;
+                offset -= origin;
+                transform.position = origin + Vector2.ClampMagnitude(offset, 50);
+                //Debug.Log(transform.localPosition);
             }
 
         }
         else
         {
-            transform.localPosition = Vector2.zero;
+            transform.position = origin;
             pointerVec = Vector2.zero;
         }
     }
