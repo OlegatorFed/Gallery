@@ -65,13 +65,15 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
                 offset -= origin;
                 offset = Vector2.ClampMagnitude(offset, 50);
                 transform.position = origin + Vector2.ClampMagnitude(offset, 50);
-                Debug.Log(offset);
+                
             }
 
         }
         else
         {
             transform.position = origin;
+            offset = Vector3.zero;
         }
+        Debug.Log(offset);
     }
 }

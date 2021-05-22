@@ -10,21 +10,24 @@ public class Player : MonoBehaviour
     public Joystick joystick;
     public Joystick cameraJoystick;
 
+    float moveSpeed = 0.5f;
+    float gravity = -13.0f;
+
+    float velocityY = 0.0f;
+
+    CharacterController characterController;
+
     float cameraPitch = 0.0f;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        characterController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (joystick.statusDown)
-        {
-            this.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(new Vector3(joystick.offset.x, 0, joystick.offset.y), 20);
-            //Debug.Log(this.GetComponent<Rigidbody>().velocity);
-        }
+        UpdateMove();
 
         UpdateLook();
     }
@@ -33,9 +36,9 @@ public class Player : MonoBehaviour
     {
         if (cameraJoystick.statusDown)
         {
-            playerCamera.Rotate(Vector3.up, cameraJoystick.offset.x * 0.01f);
+            transform.Rotate(Vector3.up, cameraJoystick.offset.x * 0.01f);
 
-            
+
 
             cameraPitch -= cameraJoystick.offset.y * 0.01f;
 
@@ -43,5 +46,19 @@ public class Player : MonoBehaviour
 
             playerCamera.localEulerAngles = Vector3.right * cameraPitch;
         }
+        
+    }
+
+    void UpdateMove()
+    {
+
+        if (characterController.isGrounded)
+            velocityY = 0.0f;
+        velocityY += gravity * Time.deltaTime;
+
+        Vector3 velocity = (transform.forward * joystick.offset.y + transform.right * joystick.offset.x) * moveSpeed + Vector3.up * velocityY;
+
+        characterController.Move(velocity * Time.deltaTime);
+        
     }
 }
