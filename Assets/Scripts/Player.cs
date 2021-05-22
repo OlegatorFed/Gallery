@@ -5,7 +5,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
+    public Transform playerCamera;
+
     public Joystick joystick;
+    public Joystick cameraJoystick;
+
+    float cameraPitch = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +22,26 @@ public class Player : MonoBehaviour
     {
         if (joystick.statusDown)
         {
-            this.GetComponent<Rigidbody>().velocity = new Vector3(joystick.pointerVec.x, 0, joystick.pointerVec.y) * 0.1f;
+            this.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(new Vector3(joystick.offset.x, 0, joystick.offset.y), 20);
+            //Debug.Log(this.GetComponent<Rigidbody>().velocity);
+        }
+
+        UpdateLook();
+    }
+
+    void UpdateLook()
+    {
+        if (cameraJoystick.statusDown)
+        {
+            playerCamera.Rotate(Vector3.up, cameraJoystick.offset.x * 0.01f);
+
+            
+
+            cameraPitch -= cameraJoystick.offset.y * 0.01f;
+
+            cameraPitch = Mathf.Clamp(cameraPitch, -90.0f, 90.0f);
+
+            playerCamera.localEulerAngles = Vector3.right * cameraPitch;
         }
     }
 }

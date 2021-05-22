@@ -15,7 +15,7 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     Vector2 origin;
 
     [HideInInspector]
-    public Vector2 pointerVec;
+    public Vector2 offset;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -59,20 +59,19 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
             else
             {
                 pointerPos = Input.mousePosition;
-                pointerVec = pointerPos - origin;
                 transform.position = pointerPos;
 
-                Vector2 offset = transform.position;
+                offset = transform.position;
                 offset -= origin;
+                offset = Vector2.ClampMagnitude(offset, 50);
                 transform.position = origin + Vector2.ClampMagnitude(offset, 50);
-                //Debug.Log(transform.localPosition);
+                Debug.Log(offset);
             }
 
         }
         else
         {
             transform.position = origin;
-            pointerVec = Vector2.zero;
         }
     }
 }
