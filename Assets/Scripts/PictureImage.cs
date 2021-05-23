@@ -11,9 +11,14 @@ public class PictureImage : MonoBehaviour, IDragHandler
     public GameObject fullScreenBtn;
     public GameObject zoomInBtn;
     public GameObject zoomOutBtn;
+    public GameObject descBtn;
+    public GameObject descFrame;
+    public Text descText;
     public GameObject exitBtn;
 
     bool zoomedIn = false;
+    bool descOpened = false;
+    bool fullScrMode = false;
 
     Vector2 maxOffsetUnFull = new Vector2(1000f, 0);
     Vector2 minOffsetUnFull = new Vector2(0, -450f);
@@ -34,18 +39,20 @@ public class PictureImage : MonoBehaviour, IDragHandler
         
     }
 
-    public void OnPictureClick(Texture2D texture)
+    public void OnPictureClick(Texture2D texture, string description)
     {
         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 
         GetComponent<Image>().sprite = sprite;
+
+        descText.text = description;
 
         gameObject.SetActive(true);
     }
 
     public void GoFullScreen()
     {
-        
+        fullScrMode = !fullScrMode;
 
         rect.anchorMin = Vector2.zero;
         rect.anchorMax = Vector2.one;
@@ -59,10 +66,12 @@ public class PictureImage : MonoBehaviour, IDragHandler
         zoomInBtn.SetActive(true);
 
         exitBtn.transform.localPosition = new Vector3(900, 405);
+        descBtn.transform.localPosition = new Vector3(0, -355);
     }
 
     public void UnFullScreen()
     {
+        fullScrMode = !fullScrMode;
 
         RectTransform rect = GetComponent<Image>().rectTransform;
 
@@ -78,6 +87,7 @@ public class PictureImage : MonoBehaviour, IDragHandler
         zoomInBtn.SetActive(false);
 
         exitBtn.transform.localPosition = new Vector3(415, 205);
+        descBtn.transform.localPosition = new Vector3(0, -205);
     }
 
     public void ZoomIn()
@@ -88,6 +98,7 @@ public class PictureImage : MonoBehaviour, IDragHandler
         unFullScreenBtn.SetActive(false);
         zoomInBtn.SetActive(false);
         exitBtn.SetActive(false);
+        descBtn.SetActive(false);
 
         zoomedIn = !zoomedIn;
     }
@@ -101,6 +112,7 @@ public class PictureImage : MonoBehaviour, IDragHandler
         unFullScreenBtn.SetActive(true);
         zoomInBtn.SetActive(true);
         exitBtn.SetActive(true);
+        descBtn.SetActive(true);
 
         zoomedIn = !zoomedIn;
     }
@@ -113,5 +125,28 @@ public class PictureImage : MonoBehaviour, IDragHandler
             transform.localPosition = new Vector3(Mathf.Clamp(transform.localPosition.x, -959, 959), Mathf.Clamp(transform.localPosition.y, -417, 417));
         }
         
+    }
+
+    public void DescOpen()
+    {
+        descFrame.SetActive(true);
+
+        unFullScreenBtn.SetActive(false);
+        fullScreenBtn.SetActive(false);
+        zoomInBtn.SetActive(false);
+        exitBtn.SetActive(false);
+
+        descOpened = !descOpened;
+    }
+
+    public void DescClose()
+    {
+        descFrame.SetActive(false);
+        unFullScreenBtn.SetActive(fullScrMode);
+        fullScreenBtn.SetActive(!fullScrMode);
+        zoomInBtn.SetActive(fullScrMode);
+        exitBtn.SetActive(true);
+
+        descOpened = !descOpened;
     }
 }

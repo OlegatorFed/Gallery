@@ -23,7 +23,7 @@ public class Selector : MonoBehaviour
                 var picture = hit.transform.GetComponent<Picture>();
                 if (picture)
                 {
-                    pictureImage.OnPictureClick(picture.GetComponent<Renderer>().material.GetTexture("_MainTex") as Texture2D);
+                    pictureImage.OnPictureClick(picture.GetComponent<Renderer>().material.GetTexture("_MainTex") as Texture2D, picture.description);
                     Debug.Log("Noice");
                 }
             }
