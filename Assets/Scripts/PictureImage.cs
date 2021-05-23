@@ -14,7 +14,13 @@ public class PictureImage : MonoBehaviour, IDragHandler
     public GameObject descBtn;
     public GameObject descFrame;
     public Text descText;
+    public GameObject favoriteBtn;
+    public Text favoritreBtnText;
+    public FavoritesManager favoritesManager;
+    public GameObject favoritesList;
     public GameObject exitBtn;
+
+    GameObject pictureObject;
 
     bool zoomedIn = false;
     bool descOpened = false;
@@ -39,13 +45,23 @@ public class PictureImage : MonoBehaviour, IDragHandler
         
     }
 
-    public void OnPictureClick(Texture2D texture, string description)
+    public void OnPictureClick(Picture picture)
     {
+        Texture2D texture = picture.GetComponent<Renderer>().material.GetTexture("_MainTex") as Texture2D;
+        string description = picture.description;
+
         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 
         GetComponent<Image>().sprite = sprite;
 
         descText.text = description;
+
+        pictureObject = picture.gameObject;
+
+        if (favoritesManager.favorites.Contains(pictureObject))
+            favoritreBtnText.text = "В избранном";
+        else
+            favoritreBtnText.text = "Добавить в избранное";
 
         gameObject.SetActive(true);
     }
@@ -64,9 +80,11 @@ public class PictureImage : MonoBehaviour, IDragHandler
         unFullScreenBtn.SetActive(true);
         fullScreenBtn.SetActive(false);
         zoomInBtn.SetActive(true);
+        favoritesList.SetActive(false);
 
         exitBtn.transform.localPosition = new Vector3(900, 405);
         descBtn.transform.localPosition = new Vector3(0, -355);
+        favoriteBtn.transform.localPosition = new Vector3(-835, 395);
     }
 
     public void UnFullScreen()
@@ -85,9 +103,11 @@ public class PictureImage : MonoBehaviour, IDragHandler
         unFullScreenBtn.SetActive(false);
         fullScreenBtn.SetActive(true);
         zoomInBtn.SetActive(false);
+        favoritesList.SetActive(true);
 
         exitBtn.transform.localPosition = new Vector3(415, 205);
         descBtn.transform.localPosition = new Vector3(0, -205);
+        favoriteBtn.transform.localPosition = new Vector3(-420, 208);
     }
 
     public void ZoomIn()
@@ -99,6 +119,7 @@ public class PictureImage : MonoBehaviour, IDragHandler
         zoomInBtn.SetActive(false);
         exitBtn.SetActive(false);
         descBtn.SetActive(false);
+        favoriteBtn.SetActive(false);
 
         zoomedIn = !zoomedIn;
     }
@@ -113,6 +134,7 @@ public class PictureImage : MonoBehaviour, IDragHandler
         zoomInBtn.SetActive(true);
         exitBtn.SetActive(true);
         descBtn.SetActive(true);
+        favoriteBtn.SetActive(true);
 
         zoomedIn = !zoomedIn;
     }
@@ -135,6 +157,7 @@ public class PictureImage : MonoBehaviour, IDragHandler
         fullScreenBtn.SetActive(false);
         zoomInBtn.SetActive(false);
         exitBtn.SetActive(false);
+        favoriteBtn.SetActive(false);
 
         descOpened = !descOpened;
     }
@@ -146,7 +169,18 @@ public class PictureImage : MonoBehaviour, IDragHandler
         fullScreenBtn.SetActive(!fullScrMode);
         zoomInBtn.SetActive(fullScrMode);
         exitBtn.SetActive(true);
+        favoriteBtn.SetActive(true);
 
         descOpened = !descOpened;
+    }
+
+    public void FavoritesManagement()
+    {
+        favoritesManager.UpdateList(pictureObject, favoritesManager.favorites.Contains(pictureObject));
+
+        if (favoritesManager.favorites.Contains(pictureObject.gameObject))
+            favoritreBtnText.text = "В избранном";
+        else
+            favoritreBtnText.text = "Добавить в избранное";
     }
 }

@@ -23,8 +23,8 @@ public class Selector : MonoBehaviour
                 var picture = hit.transform.GetComponent<Picture>();
                 if (picture)
                 {
-                    pictureImage.OnPictureClick(picture.GetComponent<Renderer>().material.GetTexture("_MainTex") as Texture2D, picture.description);
-                    Debug.Log("Noice");
+                    //pictureImage.OnPictureClick(picture.GetComponent<Renderer>().material.GetTexture("_MainTex") as Texture2D, picture.description);
+                    pictureImage.OnPictureClick(picture);
                 }
             }
         }
@@ -37,7 +37,7 @@ public class Selector : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            Debug.Log(hit.transform.gameObject.name);
+            //Debug.Log(hit.transform.gameObject.name);
             return (hit, true);
         }
 

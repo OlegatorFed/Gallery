@@ -53,8 +53,11 @@ public class Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         {
             if (pointerId >= 0 && pointerId < Input.touches.Length)
             {
-                TouchDist = Input.touches[pointerId].position - pointerPos;
                 pointerPos = Input.touches[pointerId].position;
+                TouchDist = pointerPos - origin;
+                //pointerPos = Input.touches[pointerId].position;
+                offset = Vector2.ClampMagnitude(TouchDist, 50);
+                transform.position = origin + Vector2.ClampMagnitude(offset, 50);
             }
             else
             {
